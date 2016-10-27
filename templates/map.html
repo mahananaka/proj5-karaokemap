@@ -94,9 +94,12 @@
     $.getJSON(geocoding_url,
       // response handler
       function(data) {
-        console.log(data.query);
         console.log(data.features[0].place_name);
         console.log(desc);
+
+        var marker = L.marker([lat,long]).addTo(mymap);
+        marker.bindPopup("<b>" + desc + "</b><br>" + data.features[0].place_name);
+
     }); // End of getJSON
   }
 
