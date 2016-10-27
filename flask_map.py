@@ -18,8 +18,7 @@ import datetime # But we still need time
 from dateutil import tz  # For interpreting local times
 
 # Our own module
-# import acp_limits
-# from acp_calc import AcpBrevet
+import pre #processes the poimarkers.txt
 
 ###
 # Globals
@@ -38,6 +37,7 @@ try:
   flask.session["mapboxid"] = raw.readline().strip()
 except:
     app.logger.debug("Error while reading mapbox file")
+    raise
 
 ###
 # Pages
@@ -48,13 +48,10 @@ except:
 @app.route("/map")
 def index():
   app.logger.debug("Main page entry")
+
+  raw = open(CONFIG.pins)
+  flask.session["pins"] = pre.process(raw)
   return flask.render_template('map.html')
-
-@app.route("/output", methods=["POST"])
-def output():
-  app.logger.debug("Output page requested")
-  return flask.render_template('output.html')
-
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -69,62 +66,19 @@ def page_not_found(error):
 #   These return JSON, rather than rendering pages. 
 #
 ###############
-@app.route("/_set_start", methods = ["POST"])
+@app.route("/_get_pins", methods = ["POST"])
 def set_start():
   """
-  Creates and AcpBrevet object with from total length and start time.
+  Get the places of interest for the map.
   """
   app.logger.debug("Got a JSON set_start post");
-  global dateFormat
-  reply = {}
 
-  flask.session["bStart"] = request.form["bStart"]
-  flask.session["bLength"] = request.form["bLength"]
-  bLength = int(request.form["bLength"])
-  try:
-    start = arrow.get(flask.session["bStart"], "YYYY/MM/DD HH:mm")
-  except:
-    reply["message"] = "Bad date Time."
-    return jsonify(result=reply)
-  
-  brevet = AcpBrevet(bLength, start)
-  open_limit = brevet.calc_open(0,bLength)
-  close_limit = brevet.calc_close(0,bLength)
-
-  reply["message"] = "Start of event and length set."
-  reply["open"] = open_limit.format(dateFormat)
-  reply["close"] = close_limit.format(dateFormat)
-  return jsonify(result=reply)
-
-#----------------------
-
-@app.route("/_calc_times", methods = ["POST"])
-def calc_times():
-  """
-  Calculates open/close times from kilometers, using rules 
-  described at http://www.rusa.org/octime_alg.html.
-  Expects one URL-encoded argument, the number of miles. 
-  """
-  app.logger.debug("Got a JSON calc_time post");
-  global dateFormat
-  reply = {}
-  bLength = int(request.form["bLength"])
-
-  try:
-    start = arrow.get(flask.session["bStart"], "YYYY/MM/DD HH:mm")
-  except:
-    reply["message"] = "Bad date Time."
-    return jsonify(result=reply)
-
-  brevet = AcpBrevet(bLength, start)
-  open_limit = brevet.calc_open(int(request.form["dist"]),bLength)
-  close_limit = brevet.calc_close(int(request.form["dist"]),bLength)
-
-  reply["message"] = "Controle added or updated."
-  reply["open"] = open_limit.format(dateFormat)
-  reply["close"] = close_limit.format(dateFormat)
+  reply = [ ]
+  raw = open(CONFIG.pins)
+  reply = pre.process(raw)
 
   return jsonify(result=reply)
+
  
 #################
 #
