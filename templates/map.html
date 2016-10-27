@@ -78,15 +78,26 @@
   $(document).ready(function(){
       $.post( "/_get_pins", { }, //function to call on server, no arguments
         function(data) { //this function handles the response.
-            for (var i=0; i<data.result.length; i++) {
-              poi = data.result[i];
-              console.log(poi["description"]);
-              console.log(poi["lat"]);
-              console.log(poi["long"]);
-            }
+          for (var i=0; i<data.result.length; i++) {
+            poi = data.result[i];
+            
+            reverseGeocoding(poi["lat"],poi["long"])
+          }
         }
-    );
+      );
   });   // end of what we do on document ready
+
+  function reverseGeocoding(lat,long){
+    var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+    geocoding_url += lat + "," + long;
+    geocoding_url += ".json?access_token={{ session.access_token}}";
+
+    $.getJSON(geocoding_url, ,
+      // response handler
+      function(data) {
+        console.log(data);
+    }); // End of getJSON
+  }
 
 //"https://api.mapbox.com/geocoding/v5/mapbox.places/" + e.latlng + ".json?access_token={{ session.access_token}}"
 
