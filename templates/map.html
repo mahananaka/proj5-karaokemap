@@ -63,6 +63,15 @@
       accessToken: 'pk.eyJ1IjoibWFoYW5hbmFrYSIsImEiOiJjaXVydzZkNnMwMDl3Mnpxamc2YnJqdTN6In0.QN32luonRpWSlq5zXruTYA'
   }).addTo(mymap);
 
+  function onMapClick(e) {
+    alert("You clicked the map at " + e.latlng);
+
+    var marker = L.marker(e.latlng).addTo(mymap);
+    marker.bindPopup("<b>Hello User!</b><br>Is this your location?").openPopup();
+  }
+
+  mymap.on('click', onMapClick);
+
 </script>
 
 </div>
