@@ -17,30 +17,21 @@
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
    </script>
 
-  <!-- <script type="text/javascript"  -->
-  <!--    src="/static/js/calc.js"> -->
-  <!-- </script> -->
+   <!-- Must haves for Leaflet -->
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+   <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+  
 </head>
 
    <!-- Our own style sheet -->
-   <link rel="stylesheet" href="/static/css/calc.css" />
+   <link rel="stylesheet" href="{{ url_for('map.css') }}" />
 
 <body>
 <!-- bootstrap requires a 'container' div around content -->
 <div class="container">
 
 
-<h1 class="text-center">ACP Brevet</h1>
-<form role="form" method="post" action="{{ url_for('output') }}" onsubmit="return validateForm()">
-<div class="container" style="position: absolute; top: 20px; left: 0px; right: 0px; margin-left: auto; margin-right: auto;" name="alertContainer">
-</div>
-  <!--
-  -- If there are any warnings or other messages from a prior
-  -- request to the server, 
-  -- they appear above the rest of the content, just until the next 
-  -- action.  (This is only on request/response transactions that
-  -- result in regenerating the page, not on every xmlhttp request.) 
-  -->
+<h1 class="text-center">Leaflet and Mapbox Map</h1>
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -53,243 +44,11 @@
 {% endwith %}
 <br>
 
-<div class="controls-row">
+<div id="mapid"></div>
 
-<div class="dropdown control-group" style="padding-left: 16px;padding-bottom: 5px;">
-  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="dropMenu">Brevet Distance: 200 km <span class="caret"/></button>
-  <ul class="dropdown-menu">
-    <li><a href='#' name="ddmItem">200 km </a></li>
-    <li><a href='#' name="ddmItem">300 km </a></li>
-    <li><a href='#' name="ddmItem">400 km </a></li>
-    <li><a href='#' name="ddmItem">600 km </a></li>
-    <li><a href='#' name="ddmItem">1000 km </a></li>
-  </ul>
-</div>
-    <div class="control-group col col-sm-3">
-        <div class="input-group">
-            <span class="input-group-addon">Start Date</span>
-            <input type="text" class="form-control" name="startdate" id="startDate" value="YYYY/MM/DD">
-        </div>
-    </div>
-    <div class="control-group col col-sm-3">
-        <div class="input-group">
-            <span class="input-group-addon">Start Time</span>
-            <input type="text" class="form-control" name="starttime" id="startTime" value="HH:mm">
-        </div>
-    </div>
-</div>
-<br><br><br><br>
-<!-- Design on bootstrap grid -->
-<div class="container hidden" name="controles">
-  <div class="row">
-    <div class="col-sm-1">
-      <p class="text-center"><u>No.</u></p>
-    </div>
-    <div class="col-sm-4">
-      <p class="text-center"><u>Distance</u></p>
-    </div>
-    <div class="col-sm-3">
-      <p class="text-center"><u>Location</u></p>
-    </div>
-    <div class="col-sm-2">
-      <p class="text-center"><u>Open Time</u></p>
-    </div>
-    <div class="col-sm-2">
-      <p class="text-center"><u>Close Time</u></p>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-1">
-      <div class="text-center h5">1</div>
-    </div>
-    <div class="col-sm-2">
-      <input type="text" class="form-control text-center" name="miles1" value="0" disabled/>
-    </div>
-    <div class="col-sm-2">
-      <input type="text" class="form-control text-center" name="kilometers1" value="0" disabled/>
-    </div>
-    <div class="col-sm-3">
-      <input type="text" class="form-control text-center" name="location1" value="Optional" />
-    </div>
-    <div class="col-sm-2">
-      <p class="times text-center" name="open" id="firstOpen">(Open)</p>
-    </div>
-    <div class="col-sm-2">
-      <p class="times text-center" name="close" id="firstClose">(Close)</p>
-    </div>
-  </div>
-
-  {% for n in range(19) %}
-  <div class="row hidden">
-    <div class="col-sm-1">
-      <div class="text-center h5" name="counter">{{ (loop.index+1) }}</div>
-    </div>
-    <div class="col-sm-2">
-      <input type="text" class="form-control text-center" name="miles{{ (loop.index+1) }}" value="Miles" />
-    </div>
-    <div class="col-sm-2">
-      <input type="text" class="form-control text-center" name="kilometers{{ (loop.index+1) }}" value="Kilometers" />
-    </div>
-    <div class="col-sm-3">
-      <input type="text" class="form-control text-center" name="location{{ (loop.index+1) }}" value="Optional" />
-    </div>
-    <div class="col-sm-2">
-      <p class="times text-center" name="open">(Open)</p>
-    </div>
-    <div class="col-sm-2">
-      <p class="times text-center" name="close">(Close)</p>
-    </div>
-  </div>
-  {% endfor %}
-  <div class="row">
-    <div class="col-sm-10"></div>
-    <div class="col-sm-2"><input type="submit" class="btn btn-success pull-right" value="Finish"></div>
-  </div>
-</div>
-</form>
 
 <script type="text/javascript">
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-  //regular expressions used to check input
-  var dateRegex = /^\d{4}\/([0][1-9]|[1][012])\/([0][1-9]|[12][\d]|[3][01])$/; //  YYYY/MM/DD; doesn't stop bad dates like Feb 30
-  var timeRegex = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/; //allows only 00:00 to 23:59
-  var brevetDistance = /\b\d{3,4}\b/; //gets 3 to 4 integers in the middle of string
-  var number
-  var KM_PER_MILE = 1.6; //conversion for mi and km
-  var brevetLength = 200; //initial value, lowest brevet length
-  var cControleCount = 2; //index used to reveal new inputs as needed
-  $(document).ready(function(){
-   // Do the following when the page is finished loading
-      // When a field named 'miles' is changed ...
-      $('input[name^="miles"]').change(
-          function(){
-              var miles = $(this).val();
-              if($.isNumeric(miles)){
-                  var kmInput = $(this).parents(".row").find("input[name^='kilometers']");
-                  kmInput.val(Math.round(miles*KM_PER_MILE));
-                  //make ajax post
-                  getControleTimes(kmInput.val(),brevetLength,this);
-              }
-              else
-                sendAlert("Input is not a number","warning");
-          });  // End of the change function
-      //When a field named 'kilometers' is changed
-      $('input[name^="kilometers"]').change(
-          function(){
-              var kilometers = $(this).val();
-              if($.isNumeric(kilometers)){
-                  var miInput = $(this).parents(".row").find("input[name^='miles']");
-                  miInput.val(Math.round(kilometers/KM_PER_MILE));
-                  //make ajax post
-                  getControleTimes(kilometers,brevetLength,this);
-              }
-              else
-                sendAlert("Input is not a number","warning");
-          });  // End of the change function
-  });   // end of what we do on document ready
-  $('a[name="ddmItem"]').click(function(){
-      $('#dropMenu').html("Brevet Length: " + $(this).text() + " <span class='caret' />");
-      brevetLength = parseInt($(this).text());
-      //handles ajax post
-      createEvent();
-      updateAllControles();
-  });
-  var getControleTimes = function(dist, tDist, source) {
-    $.post( "/_calc_times", {"dist": dist, "bLength": brevetLength}, //function to call on server, dict with arguments
-        function(data) { //this function handles the response.
-            if(data.result.message.includes("added")){ //valid open and close times received
-                //display times and alert changes to user
-                $(source).parents(".row").find("p[name='open']").html(data.result.open);
-                $(source).parents(".row").find("p[name='close']").html(data.result.close);
-                sendAlert(data.result.message,"success");
-                var curCount = parseInt($(source).parents(".row").find("div[name='counter']").html());
-                if(curCount == (cControleCount-1))
-                  displayNextControl();
-            }
-            else
-              sendAlert(data.result.message,"danger"); //problem let the user know.
-        }
-    );
-  }
-  //this reveals next control, they all exist at start but are hidden
-  var displayNextControl = function(){
-      if(cControleCount<=21){ //because this is the max amount we have available
-          nextChild = $('div[name="controles"]').children().eq(cControleCount);
-          nextChild.removeClass("hidden");
-          cControleCount++;
-      }
-      else
-        sendAlert("Sorry, you have run out of controles.","warning");
-  }
-  var createEvent = function(){
-      var date = $('#startDate').val();
-      var time = $('#startTime').val();
-      
-      if(dateRegex.test(date) && timeRegex.test(time)){ //ajax post doesn't happen until regex pass
-          //calling _set_start, with a dict object as the arguments
-          $.post( "/_set_start", {"bStart": date + " " + time, "bLength": brevetLength},
-              function(data) { //this function handles the response.
-                  var msg = data.result.message;
-                  if(msg.includes("set")){ //successful operation
-                      sendAlert(msg,"success");
-                      $('#firstOpen').html(data.result.open);
-                      $('#firstClose').html(data.result.close);
-                      $('div[name="controles"]').removeClass("hidden"); //showing controle inputs
-                      if(cControleCount == 2)
-                        displayNextControl();
-                      else
-                        updateAllControles();
-                  }
-                  else
-                    sendAlert(msg, "danger"); //problems occurred
-              }
-          );
-      }
-  }
-  //check date-time input with each keyup
-  $('input[name^="start"]').keyup(function(){
-      //this is only a try, createEvent handles validation as well
-      createEvent();
-  });
-  var sendAlert = function(message, type){
-      //making a string of html to write to page, not very pretty but it works
-      var htmlcode = "<div class='alert alert-" + type + " text-center'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
-      htmlcode = htmlcode + message + "</div>";
-      msgContainer = $('div[name="alertContainer"]')
-      msgContainer.html(htmlcode);
-      //the following is the code to make the alerts disappear automatically
-      //credit to "I Can Has Kittenz" @ http://stackoverflow.com/questions/23101966/bootstrap-alert-auto-close
-      msgContainer.fadeTo(2000, 500).slideUp(500, function(){
-          msgContainer.slideUp(500);
-      });
-  }
-  var updateAllControles = function(){
-      if(cControleCount > 3){
-          var kmControles = $('div[name="controles"]').find("input[name='kilometers']");
-          kmControles.each(function (index){
-              var kms = $(this).val();
-              if($.isNumeric(kms)){
-                  getControleTimes(kms,brevetLength,this);
-              }
-          });
-      }
-  }
-  function validateForm(){
-    var valid = false;
-    
-    $('input[name^="kilometers"]').each(function(){
-        if($(this).val() != "Kilometers"){
-          var kms = parseInt($(this).val());
-          if(kms >= brevetLength)
-            valid = true;
-        }
-    });
-    if(!valid)
-      sendAlert("Last control must be at least the length of the Brevet","warning");
-    
-    return valid;
-  }
   
 </script>
 
