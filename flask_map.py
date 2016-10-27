@@ -44,7 +44,7 @@ def index():
     
   raw = open(CONFIG.pins)
   raw = open(CONFIG.mapboxfile)
-  app.logger.debug("contents of raw: " + raw)
+  app.logger.debug("contents of raw: " + str(raw))
       #flask.session["mapbox_token"] = CONFIG.mapboxtoken
       #flask.session["mapbox_id"] = CONFIG.mapboxid  
   app.logger.debug("Failed to setup MapBox token and ID.")
