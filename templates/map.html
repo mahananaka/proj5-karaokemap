@@ -88,7 +88,8 @@
   });   // end of what we do on document ready
 
   var reverseGeocoding = function(lat,long){
-    var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+ lat + "," + long + ".json?access_token={{ session.access_token}}";
+    var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
+            + String(lat) + "," + String(long) + ".json?access_token="{{ session.access_token}};
 
     console.log(geocoding_url);
 
