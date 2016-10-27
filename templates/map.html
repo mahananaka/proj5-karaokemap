@@ -91,14 +91,11 @@
     var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
             + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
 
-    console.log(geocoding_url);
-
     $.getJSON(geocoding_url,
       // response handler
       function(data) {
-        console.log(data.features[1]);
-        console.log(data.features[1].address);
-        console.log(data.features[1]["text"]);
+        console.log(data.query);
+        console.log(data.features[0]);
     }); // End of getJSON
   }
 
