@@ -96,9 +96,9 @@
     $.getJSON(geocoding_url,
       // response handler
       function(data) {
-        console.log(data.features);
-        console.log(data.features["address"]);
-        console.log(data.features["text"]);
+        console.log(data.features[1]);
+        console.log(data.features[1].address);
+        console.log(data.features[1]["text"]);
     }); // End of getJSON
   }
 
