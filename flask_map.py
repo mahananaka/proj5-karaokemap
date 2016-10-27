@@ -32,7 +32,6 @@ app.secret_key = str(uuid.uuid4())
 app.debug=CONFIG.DEBUG
 app.logger.setLevel(logging.DEBUG)
 
-
 ###
 # Pages
 ###
@@ -41,8 +40,16 @@ app.logger.setLevel(logging.DEBUG)
 @app.route("/index")
 @app.route("/map")
 def index():
-  app.logger.debug("Main page entry")
-  flask.session["startdist"] = 0
+  #app.logger.debug("Main page entry")
+  
+  try:
+    raw = open(CONFIG.mapboxfile)
+    app.logger.debug("contents of raw: " + raw)
+      #flask.session["mapbox_token"] = CONFIG.mapboxtoken
+      #flask.session["mapbox_id"] = CONFIG.mapboxid  
+  except:
+    app.logger.debug("Failed to setup MapBox token and ID.")
+
   return flask.render_template('map.html')
 
 @app.route("/output", methods=["POST"])
