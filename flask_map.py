@@ -37,7 +37,7 @@ try:
   flask.session["mapboxid"] = raw.readline().strip()
 except:
     app.logger.debug("Error while reading mapbox file")
-    raise
+    #raise
 
 ###
 # Pages
