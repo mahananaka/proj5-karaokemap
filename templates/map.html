@@ -78,9 +78,9 @@
   $(document).ready(function(){
       $.post( "/_get_pins", { }, //function to call on server, no arguments
         function(data) { //this function handles the response.
-            for poi in data.result
+            for (poi in data.result) {
               console.log(poi)
-
+            }
         }
     );
   });   // end of what we do on document ready
