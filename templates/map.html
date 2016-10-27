@@ -87,10 +87,10 @@
       );
   });   // end of what we do on document ready
 
-  function reverseGeocoding(lat,long){
-    var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
-    geocoding_url += lat + "," + long;
-    geocoding_url += ".json?access_token={{ session.access_token}}";
+  var reverseGeocoding = function(lat,long){
+    var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+ lat + "," + long + ".json?access_token={{ session.access_token}}";
+
+    console.log(geocoding_url);
 
     $.getJSON(geocoding_url,
       // response handler
