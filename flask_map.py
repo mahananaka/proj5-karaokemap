@@ -43,6 +43,7 @@ def index():
   #app.logger.debug("Main page entry")
   
   try:
+    app.logger.debug(CONFIG.mapboxfile)
     raw = open(CONFIG.mapboxfile)
     app.logger.debug("contents of raw: " + raw)
       #flask.session["mapbox_token"] = CONFIG.mapboxtoken
