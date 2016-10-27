@@ -89,7 +89,7 @@
 
   var reverseGeocoding = function(lat,long){
     var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
-            + String(long) + ", " + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
+            + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
 
     console.log(geocoding_url);
 

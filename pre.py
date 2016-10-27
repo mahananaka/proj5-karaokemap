@@ -19,8 +19,8 @@ def process(raw):
         parts = line.split(';')
         if len(parts) == 3:
             entry["description"] = parts[0].strip()
-            entry["lat"] = parts[1].strip()
-            entry["long"] = parts[2].strip()
+            entry["long"] = parts[1].strip()
+            entry["lat"] = parts[2].strip()
             cooked.append(entry)
             entry = { }
             continue
