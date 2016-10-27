@@ -75,8 +75,17 @@
 
   mymap.on('click', onMapClick);
 
+  $(document).ready(function(){
+      $.post( "/_get_pins", { }, //function to call on server, no arguments
+        function(data) { //this function handles the response.
+            for poi in data.result
+              console.log(poi)
 
-"https://api.mapbox.com/geocoding/v5/mapbox.places/" + e.latlng + ".json?access_token={{ session.access_token}}"
+        }
+    );
+  });   // end of what we do on document ready
+
+//"https://api.mapbox.com/geocoding/v5/mapbox.places/" + e.latlng + ".json?access_token={{ session.access_token}}"
 
 </script>
 

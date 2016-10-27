@@ -32,6 +32,13 @@ app.secret_key = str(uuid.uuid4())
 app.debug=CONFIG.DEBUG
 app.logger.setLevel(logging.DEBUG)
 
+try:
+  raw = open(CONFIG.mapboxfile)
+  flask.session["mapboxtoken"] = raw.readline().strip()
+  flask.session["mapboxid"] = raw.readline().strip()
+except:
+    app.logger.debug("Error while reading mapbox file")
+
 ###
 # Pages
 ###
@@ -40,14 +47,7 @@ app.logger.setLevel(logging.DEBUG)
 @app.route("/index")
 @app.route("/map")
 def index():
-  #app.logger.debug("Main page entry")
-  try:  
-    raw = open(CONFIG.mapboxfile)
-    flask.session["mapboxtoken"] = raw.readline().strip()
-    flask.session["mapboxid"] = raw.readline().strip()
-  except:
-    app.logger.debug("Error while reading file")
-
+  app.logger.debug("Main page entry")
   return flask.render_template('map.html')
 
 @app.route("/output", methods=["POST"])
