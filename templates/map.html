@@ -64,10 +64,9 @@
   }).addTo(mymap);
 
   function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(mymap);
+    var popup.setLatLng(e.latlng)
+        popup.setContent("You clicked the map at " + e.latlng.toString())
+        popup.openOn(mymap);
 
     //var marker = L.marker(e.latlng).addTo(mymap);
     //marker.bindPopup("<b>Hello User!</b><br>Is this your location?").openPopup();
