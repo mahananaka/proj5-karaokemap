@@ -97,7 +97,7 @@
       // response handler
       function(data) {
         console.log(data.features);
-        console.log(data.features.place_name);
+        console.log(data.features["address"] + data.features["text"]);
     }); // End of getJSON
   }
 
