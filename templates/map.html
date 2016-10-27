@@ -55,6 +55,7 @@
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   
   var mymap = L.map('mapid').setView([44.059, -123.101], 13 );
+  var popup = L.popup();
  
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFoYW5hbmFrYSIsImEiOiJjaXVydzZkNnMwMDl3Mnpxamc2YnJqdTN6In0.QN32luonRpWSlq5zXruTYA', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -64,9 +65,10 @@
   }).addTo(mymap);
 
   function onMapClick(e) {
-    var popup.setLatLng(e.latlng)
-        popup.setContent("You clicked the map at " + e.latlng.toString())
-        popup.openOn(mymap);
+    popup
+        .setLatLng(e.latlng);
+        .setContent("You clicked the map at " + e.latlng.toString());
+        .openOn(mymap);
 
     //var marker = L.marker(e.latlng).addTo(mymap);
     //marker.bindPopup("<b>Hello User!</b><br>Is this your location?").openPopup();
