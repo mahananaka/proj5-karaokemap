@@ -78,8 +78,11 @@
   $(document).ready(function(){
       $.post( "/_get_pins", { }, //function to call on server, no arguments
         function(data) { //this function handles the response.
-            for (i in data.result) {
-              console.log(data.result[i])
+            for (var i=0; i<data.result.length; i++) {
+              poi = data.result[i];
+              console.log(poi["description"]);
+              console.log(poi["lat"]);
+              console.log(poi["long"]);
             }
         }
     );
