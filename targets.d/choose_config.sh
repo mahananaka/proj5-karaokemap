@@ -25,12 +25,15 @@ function gen_config {
     gendate="$(date)"
     cat <<EOF
 """
-Configuration of vocabulary game server.
-Generated $( date )
+Configuration of map object.
 Edit to fit development or deployment environment.
 """
 PORT=${port}
 DEBUG = True  # Set to False for production use
+pins="data/poimarkers.txt"
+mapboxtoken=""
+mapboxid=""
+
 EOF
 }
 
