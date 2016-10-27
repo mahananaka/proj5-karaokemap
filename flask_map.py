@@ -33,11 +33,11 @@ app.logger.setLevel(logging.DEBUG)
 
 try:
   raw = open(CONFIG.mapboxfile)
-  flask.session["mapboxtoken"] = raw.readline().strip()
-  flask.session["mapboxid"] = raw.readline().strip()
+  #flask.session["mapboxtoken"] = raw.readline().strip()
+  #flask.session["mapboxid"] = raw.readline().strip()
 except:
     app.logger.debug("Error while reading mapbox file")
-    #raise
+    raise
 
 ###
 # Pages
