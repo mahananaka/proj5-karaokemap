@@ -45,7 +45,6 @@ def index():
     raw = open(CONFIG.mapboxfile)
     flask.session["mapboxtoken"] = raw.readline().strip()
     flask.session["mapboxid"] = raw.readline().strip()
-    app.logger.debug(flask.session["mapboxtoken"] + "\n" + flask.session["mapboxid"])
   except:
     app.logger.debug("Error while reading file")
 
