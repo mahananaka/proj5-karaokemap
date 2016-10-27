@@ -41,15 +41,13 @@ app.logger.setLevel(logging.DEBUG)
 @app.route("/map")
 def index():
   #app.logger.debug("Main page entry")
-  
-  try:
-    app.logger.debug(CONFIG.mapboxfile)
-    raw = open(CONFIG.mapboxfile)
-    app.logger.debug("contents of raw: " + raw)
+    
+  raw = open(CONFIG.pins)
+  raw = open(CONFIG.mapboxfile)
+  app.logger.debug("contents of raw: " + raw)
       #flask.session["mapbox_token"] = CONFIG.mapboxtoken
       #flask.session["mapbox_id"] = CONFIG.mapboxid  
-  except:
-    app.logger.debug("Failed to setup MapBox token and ID.")
+  app.logger.debug("Failed to setup MapBox token and ID.")
 
   return flask.render_template('map.html')
 
