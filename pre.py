@@ -17,7 +17,7 @@ def process(raw):
         if len(line) == 0 or line[0]=="#" :
             continue
         parts = line.split(';')
-        if len(parts) == 3
+        if len(parts) == 3:
             entry["description"] = parts[0]
             entry["lat"] = parts[1]
             entry["long"] = parts[2]
