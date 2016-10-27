@@ -1,6 +1,6 @@
 # Format for these point of interest markers as as follows
 # <location description>; <longitude>; <latitude>
 #
-Emerald City Comics; 44.04537; -123.0808
-Nostalgia Collectibles; 44.05407; -123.09223
-Edge of the World Games & Comics; 44.08324; -123.15408
+Emerald City Comics; -123.08076; 44.04555
+Nostalgia Collectibles; -123.092726; 44.054041
+Edge of the World Games & Comics; -123.154193; 44.08338
