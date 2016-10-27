@@ -31,7 +31,7 @@ Edit to fit development or deployment environment.
 PORT=${port}
 DEBUG = True  # Set to False for production use
 pins="data/poimarkers.txt"
-mapboxfile="mapboxinfo.txt"
+mapboxfile="/mapboxinfo.txt"
 
 EOF
 }
