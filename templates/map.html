@@ -81,13 +81,13 @@
           for (var i=0; i<data.result.length; i++) {
             poi = data.result[i];
             
-            reverseGeocoding(poi["lat"],poi["long"])
+            reverseGeocoding(poi["lat"],poi["long"],poi["description"])
           }
         }
       );
   });   // end of what we do on document ready
 
-  var reverseGeocoding = function(lat,long){
+  var reverseGeocoding = function(lat,long, desc){
     var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
             + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
 
@@ -95,7 +95,8 @@
       // response handler
       function(data) {
         console.log(data.query);
-        console.log(data.features[0]);
+        console.log(data.features[0].place_name);
+        console.log(desc);
     }); // End of getJSON
   }
 
