@@ -66,19 +66,13 @@
 
   function onMapClick(e) {
 
-    console.log(e.originalEvent);
-
     if(e.originalEvent.shiftKey)
-      console.log("yep");
-    else
-      console.log("nope");
-
-    popup.setLatLng(e.latlng);
-        popup.setContent("You clicked the map at " + e.latlng.toString());
+      reverseGeocoding(e.latlng.lat,e.latlng.lng,"My Location");
+    else{
+        popup.setLatLng(e.latlng);
+        popup.setContent("You clicked the map at " + e.latlng.lat + "," + e.latlng.lng);
         popup.openOn(mymap);
-
-    //var marker = L.marker(e.latlng).addTo(mymap);
-    //marker.bindPopup("<b>Hello User!</b><br>Is this your location?").openPopup();
+    }
   }
 
   mymap.on('click', onMapClick);
