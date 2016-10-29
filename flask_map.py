@@ -47,7 +47,9 @@ def index():
     flask.session["mapboxtoken"] = raw.readline().strip() #save mapbox token and id to session variables
     flask.session["mapboxid"] = raw.readline().strip()
   except:
-    app.logger.debug("Error while reading mapbox file")
+    app.logger.debug("Error reading secrets.py; using default values")
+    flask.session["mapboxtoken"] = "pk.eyJ1IjoibWFoYW5hbmFrYSIsImEiOiJjaXVydzZkNnMwMDl3Mnpxamc2YnJqdTN6In0.QN32luonRpWSlq5zXruTYA"
+    flask.session["mapboxid"] = "mahananaka.1p03d9fb"
     #raise
     
   return flask.render_template('map.html')
