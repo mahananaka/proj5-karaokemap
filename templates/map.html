@@ -101,24 +101,24 @@
             + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
 
 
-    $.getJSON(geocoding_url,
-      // response handler
-      function(data) {
-        var pop_string = "<b>" + desc + "</b>"
+    $.getJSON(geocoding_url, (function(thisMarker){      
+        return function(data) {
+            var pop_string = "<b>" + desc + "</b>"
 
-        if(data.features.length>0){
-          var parts = data.features[0].place_name.split(",")
-          pop_string = pop_string + "<br>" + parts[0] + "<br>" + parts[1] + "," + parts[2];
-        }
+            if(data.features.length>0){
+              var parts = data.features[0].place_name.split(",")
+              pop_string = pop_string + "<br>" + parts[0] + "<br>" + parts[1] + "," + parts[2];
+            }
 
-        var marker = L.marker([lat,long]).addTo(mymap);
-        marker.bindPopup(pop_string);
-        console.log(permMarker);
-        if(permMarker != undefined){
-            console.log("trying")
-            permMarker = marker;
-        }
-    }); // End of getJSON
+            var marker = L.marker([lat,long]).addTo(mymap);
+            marker.bindPopup(pop_string);
+            console.log(thisMarker);
+            if(thisMarker != undefined){
+              console.log("trying")
+              thisMarker = marker;
+            }
+        };
+    })(permMarker)); // End of getJSON
   }
 
 //"https://api.mapbox.com/geocoding/v5/mapbox.places/" + e.latlng + ".json?access_token={{ session.access_token}}"
