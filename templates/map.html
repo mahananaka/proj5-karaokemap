@@ -73,7 +73,7 @@
         map.removeLayer(myLocation);
       }
 
-      reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here",myLocation);
+      reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here",true);
     }
     else{
       popup.setLatLng(e.latlng);
@@ -96,13 +96,13 @@
       );
   });   // end of what we do on document ready
 
-  var reverseGeocoding = function(lat,long,desc,permMarker){
+  var reverseGeocoding = function(lat,long,desc,myLoc){
     var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
             + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
 
-    console.log(permMarker);
+    console.log(myLoc);
 
-    $.getJSON(geocoding_url, (function(thisMarker){      
+    $.getJSON(geocoding_url, (function(isMyLocation){      
         return function(data) {
             var pop_string = "<b>" + desc + "</b>"
 
@@ -114,12 +114,12 @@
             var marker = L.marker([lat,long]).addTo(mymap);
             marker.bindPopup(pop_string);
             console.log(thisMarker);
-            if(thisMarker != undefined){
+            if(isMyLocation){
               console.log("trying")
-              thisMarker = marker;
+              myLocation = marker;
             }
         };
-    })(permMarker)); // End of getJSON
+    })(myLoc)); // End of getJSON
   }
 
 //"https://api.mapbox.com/geocoding/v5/mapbox.places/" + e.latlng + ".json?access_token={{ session.access_token}}"
