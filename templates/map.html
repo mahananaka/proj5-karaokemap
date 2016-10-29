@@ -68,8 +68,9 @@
   function onMapClick(e) {
 
     if(e.originalEvent.shiftKey)
-      if(myLocation);
+      if(myLocation)
         map.removeLayer(myLocation);
+      
       reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here",myLocation);
     else{
       popup.setLatLng(e.latlng);
