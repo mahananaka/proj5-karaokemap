@@ -1,5 +1,5 @@
 CONFIG.py
-mapbox_token.txt
+secrets.py
 
 # The rest are standard ignores from github
 
