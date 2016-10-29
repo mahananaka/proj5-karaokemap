@@ -113,6 +113,7 @@
 
         var marker = L.marker([lat,long]).addTo(mymap);
         marker.bindPopup(pop_string);
+        console.log(permMarker);
         if(permMarker != undefined){
             console.log("trying")
             permMarker = marker;
