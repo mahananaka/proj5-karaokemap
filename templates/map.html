@@ -35,7 +35,8 @@
 <div class="container">
 
 
-<h1 class="text-center">Leaflet and Mapbox Map</h1>
+<h1 class="text-center">Leaflet and Mapbox Map</h1><br>
+<kbd>Shift+Click</kbd> to set your location marker. <kbd>Click</kbd> for latitude and longitude of a place.
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -54,10 +55,13 @@
 <script type="text/javascript">
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   
+  //Some variables for the map, the view is statically set to be centered
+  //on Eugene, OR
   var mymap = L.map('mapid').setView([44.059, -123.101], 13 );
-  var popup = L.popup();
+  var popup = L.popup(); //getting a popup object
   var myLocation;
  
+  //this is the call to get the tile layer for our map from Mapbox.
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ session.mapboxtoken }}', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18,
@@ -66,66 +70,64 @@
   }).addTo(mymap);
 
   function onMapClick(e) {
+    if(e.originalEvent.shiftKey){ //is shift key down
+        if(myLocation)
+            mymap.removeLayer(myLocation); //remove the old marker
 
-    if(e.originalEvent.shiftKey){
-      if(myLocation){
-        console.log(myLocation)
-        mymap.removeLayer(myLocation);
-      }
-
-      reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here",true);
+        //make a marker for user's location
+        reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here",true); 
     }
     else{
+      //make a popup instead
       popup.setLatLng(e.latlng);
-      popup.setContent("You clicked the map at " + e.latlng.lat + "," + e.latlng.lng);
+      popup.setContent("The coordinates of this location:<br>Lat: " + e.latlng.lat + "<br>Long:" + e.latlng.lng);
       popup.openOn(mymap);
     }
   }
 
-  mymap.on('click', onMapClick);
+  mymap.on('click', onMapClick); //register function to call on map click
 
+  //do this when page is ready
   $(document).ready(function(){
       $.post( "/_get_pins", { }, //function to call on server, no arguments
-        function(data) { //this function handles the response.
+        function(data) { //this function is called on reponse.
           for (var i=0; i<data.result.length; i++) {
-            poi = data.result[i];
+              poi = data.result[i];
             
-            reverseGeocoding(poi["lat"],poi["long"],poi["description"])
+              reverseGeocoding(poi["lat"],poi["long"],poi["description"])
           }
         }
       );
   });   // end of what we do on document ready
 
+  //this takes a latitude and longitude and gets an address for it
+  //This also creates a pin on the map to display the results
   var reverseGeocoding = function(lat,long,desc,myLoc){
-    if(myLoc === undefined)
-      myLoc = false;
+      if(myLoc === undefined) //this is an opertional parameters
+          myLoc = false;        //this is a default value for it
 
-    var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
-            + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
+      var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
+              + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
 
-    console.log(myLoc);
+      $.getJSON(geocoding_url, (function(isMyLocation){ //using a closure to be able to pass an extra argument to the callback function
+          return function(data) {
+              var pop_string = "<b>" + desc + "</b>"
 
-    $.getJSON(geocoding_url, (function(isMyLocation){      
-        return function(data) {
-            var pop_string = "<b>" + desc + "</b>"
+              if(data.features.length>0){
+                var parts = data.features[0].place_name.split(",")
+                pop_string = pop_string + "<br>" + parts[0] +       //street address
+                              "<br>" + parts[1] + "," + parts[2];   //city, state zipcode
+              }
 
-            if(data.features.length>0){
-              var parts = data.features[0].place_name.split(",")
-              pop_string = pop_string + "<br>" + parts[0] + "<br>" + parts[1] + "," + parts[2];
-            }
+              var marker = L.marker([lat,long]).addTo(mymap); //make marker for the map
+              marker.bindPopup(pop_string);                   //pop up for the marker
 
-            var marker = L.marker([lat,long]).addTo(mymap);
-            marker.bindPopup(pop_string);
-            console.log(isMyLocation);
-            if(isMyLocation){
-              console.log("trying")
-              myLocation = marker;
-            }
-        };
-    })(myLoc)); // End of getJSON
+              //this is what we needed the closure for
+              if(isMyLocation)
+                myLocation = marker; //save marker to global myLocation so we can remove later
+          };
+      })(myLoc)); // End of getJSON, we invoke the outter function
   }
-
-//"https://api.mapbox.com/geocoding/v5/mapbox.places/" + e.latlng + ".json?access_token={{ session.access_token}}"
 
 </script>
 
