@@ -99,7 +99,7 @@
   var reverseGeocoding = function(lat,long,desc,myLoc){
     if(myLoc === undefined)
       myLoc = false;
-    
+
     var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
             + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
 
