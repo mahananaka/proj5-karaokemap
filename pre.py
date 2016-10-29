@@ -18,18 +18,16 @@ def process(raw):
             continue
         parts = line.split(';')
         if len(parts) == 3:
-            entry["description"] = parts[0].strip()
+            entry["description"] = parts[0].strip() #adding key and values to the dict
             entry["long"] = parts[1].strip()
             entry["lat"] = parts[2].strip()
-            cooked.append(entry)
+            cooked.append(entry)                    #add this dict entry into the array
             entry = { }
             continue
         else:
             raise ValueError("Trouble wiht line: '{}'\n".format(line))
-            field = parts[0]
-            content = parts[1]
         
-    return cooked
+    return cooked   #returning an array of dicts
 
 def main():
     f = open("data/poimarkers.txt")

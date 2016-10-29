@@ -32,7 +32,6 @@ app.debug=CONFIG.DEBUG
 app.logger.setLevel(logging.DEBUG)
 
 
-
 ###
 # Pages
 ###
@@ -45,7 +44,7 @@ def index():
 
   try:
     raw = open(CONFIG.mapboxfile)
-    flask.session["mapboxtoken"] = raw.readline().strip()
+    flask.session["mapboxtoken"] = raw.readline().strip() #save mapbox token and id to session variables
     flask.session["mapboxid"] = raw.readline().strip()
   except:
     app.logger.debug("Error while reading mapbox file")
@@ -74,10 +73,10 @@ def set_start():
   app.logger.debug("Got a JSON set_start post");
 
   reply = [ ]
-  raw = open(CONFIG.pins)
-  reply = pre.process(raw)
+  raw = open(CONFIG.pins)   #get points of interest from file
+  reply = pre.process(raw)  #processing the file
 
-  return jsonify(result=reply)
+  return jsonify(result=reply)  
 
  
 #################
