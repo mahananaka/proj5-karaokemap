@@ -68,8 +68,10 @@
   function onMapClick(e) {
 
     if(e.originalEvent.shiftKey){
-      if(myLocation)
+      if(myLocation){
+        console.log(myLocation)
         map.removeLayer(myLocation);
+      }
 
       reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here",myLocation);
     }
@@ -111,8 +113,10 @@
 
         var marker = L.marker([lat,long]).addTo(mymap);
         marker.bindPopup(pop_string);
-        if(permMarker != undefined)
+        if(permMarker != undefined){
+            console.log("trying")
             permMarker = marker;
+        }
     }); // End of getJSON
   }
 
