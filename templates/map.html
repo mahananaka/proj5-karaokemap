@@ -56,6 +56,7 @@
   
   var mymap = L.map('mapid').setView([44.059, -123.101], 13 );
   var popup = L.popup();
+  var myLocation;
  
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ session.mapboxtoken }}', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -67,11 +68,13 @@
   function onMapClick(e) {
 
     if(e.originalEvent.shiftKey)
-      reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here");
+      if(myLocation);
+        map.removeLayer(myLocation);
+      reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here",myLocation);
     else{
-        popup.setLatLng(e.latlng);
-        popup.setContent("You clicked the map at " + e.latlng.lat + "," + e.latlng.lng);
-        popup.openOn(mymap);
+      popup.setLatLng(e.latlng);
+      popup.setContent("You clicked the map at " + e.latlng.lat + "," + e.latlng.lng);
+      popup.openOn(mymap);
     }
   }
 
@@ -89,9 +92,10 @@
       );
   });   // end of what we do on document ready
 
-  var reverseGeocoding = function(lat,long, desc){
+  var reverseGeocoding = function(lat,long,desc,permMarker){
     var geocoding_url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" 
             + String(long) + "%2C%20" + String(lat) + ".json?access_token={{ session.mapboxtoken }}&types=address";
+
 
     $.getJSON(geocoding_url,
       // response handler
@@ -105,7 +109,8 @@
 
         var marker = L.marker([lat,long]).addTo(mymap);
         marker.bindPopup(pop_string);
-      
+        if(permMarker != undefined)
+            permMarker = marker;
     }); // End of getJSON
   }
 
