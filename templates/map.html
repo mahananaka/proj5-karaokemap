@@ -65,6 +65,12 @@
   }).addTo(mymap);
 
   function onMapClick(e) {
+
+    if(e.shiftKey)
+      console.log("yep");
+    else
+      console.log("nope");
+    
     popup.setLatLng(e.latlng);
         popup.setContent("You clicked the map at " + e.latlng.toString());
         popup.openOn(mymap);
@@ -94,11 +100,11 @@
     $.getJSON(geocoding_url,
       // response handler
       function(data) {
-        console.log(data.features[0].place_name);
-        console.log(desc);
+        if(data.features.length>0){}
 
         var marker = L.marker([lat,long]).addTo(mymap);
         marker.bindPopup("<b>" + desc + "</b><br>" + data.features[0].place_name);
+      }
 
     }); // End of getJSON
   }
