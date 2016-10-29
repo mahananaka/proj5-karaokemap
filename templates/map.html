@@ -67,7 +67,7 @@
   function onMapClick(e) {
 
     if(e.originalEvent.shiftKey)
-      reverseGeocoding(e.latlng.lat,e.latlng.lng,"My Location");
+      reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here");
     else{
         popup.setLatLng(e.latlng);
         popup.setContent("You clicked the map at " + e.latlng.lat + "," + e.latlng.lng);
@@ -100,7 +100,7 @@
 
         if(data.features.length>0){
           var parts = data.features[0].place_name.split(",")
-          pop_string = "<br>" + parts[0] + "<br>" + parts[1] + "," + parts[2];
+          pop_string = pop_string + "<br>" + parts[0] + "<br>" + parts[1] + "," + parts[2];
         }
 
         var marker = L.marker([lat,long]).addTo(mymap);
