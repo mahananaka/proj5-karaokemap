@@ -30,8 +30,8 @@ Edit to fit development or deployment environment.
 """
 PORT=${port}
 DEBUG = True  # Set to False for production use
-pins="data/poimarkers.txt"
-mapboxfile="/secrets.py"
+pins="./data/poimarkers.txt"
+mapboxfile="./secrets.py"
 
 EOF
 }
