@@ -66,9 +66,9 @@
 
   function onMapClick(e) {
 
-    console.log(e);
+    console.log(e.originalEvent);
 
-    if(e.shiftKey)
+    if(e.originalEvent.shiftKey)
       console.log("yep");
     else
       console.log("nope");
