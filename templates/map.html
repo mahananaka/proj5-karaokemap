@@ -70,7 +70,7 @@
     if(e.originalEvent.shiftKey){
       if(myLocation){
         console.log(myLocation)
-        map.removeLayer(myLocation);
+        mymap.removeLayer(myLocation);
       }
 
       reverseGeocoding(e.latlng.lat,e.latlng.lng,"I'm here",true);
