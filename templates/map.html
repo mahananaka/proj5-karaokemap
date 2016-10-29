@@ -70,7 +70,7 @@
       console.log("yep");
     else
       console.log("nope");
-    
+
     popup.setLatLng(e.latlng);
         popup.setContent("You clicked the map at " + e.latlng.toString());
         popup.openOn(mymap);
@@ -100,12 +100,16 @@
     $.getJSON(geocoding_url,
       // response handler
       function(data) {
-        if(data.features.length>0){}
+        var pop_string = "<b>" + desc + "</b>"
+
+        if(data.features.length>0){
+          var parts = data.features[0].place_name.split(",")
+          pop_string = "<br>" + parts[0] + "<br>" + parts[1] + "," + parts[2];
+        }
 
         var marker = L.marker([lat,long]).addTo(mymap);
-        marker.bindPopup("<b>" + desc + "</b><br>" + data.features[0].place_name);
-      }
-
+        marker.bindPopup(pop_string);
+      
     }); // End of getJSON
   }
 
